@@ -1,0 +1,32 @@
+name: Sync Shop-Ware Customers
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # Runs every hour
+  workflow_dispatch:     # Allows manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run sync script
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
+          SHOPWARE_BASE_URL: ${{ secrets.SHOPWARE_BASE_URL }}
+          SHOPWARE_PARTNER_ID: ${{ secrets.SHOPWARE_PARTNER_ID }}
+          SHOPWARE_SECRET: ${{ secrets.SHOPWARE_SECRET }}
+          SHOPWARE_TENANT_ID: ${{ secrets.SHOPWARE_TENANT_ID }}
+        run: node sync-shopware-customers.js
