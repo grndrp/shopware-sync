@@ -1,8 +1,8 @@
 name: Sync Shop-Ware Vehicles to Supabase
 
 on:
-  schedule:
-    - cron: '0 * * * *' # Runs at the top of every hour
+  #schedule:
+   # - cron: '0 * * * *' # Runs at the top of every hour
   workflow_dispatch: # Allows manual trigger from GitHub
 
 jobs:
