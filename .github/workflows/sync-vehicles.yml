@@ -1,0 +1,32 @@
+name: Sync Shop-Ware Vehicles to Supabase
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Runs at the top of every hour
+  workflow_dispatch: # Allows manual trigger from GitHub
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run vehicle sync
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE: ${{ secrets.SUPABASE_SERVICE_ROLE }}
+          SHOPWARE_BASE_URL: ${{ secrets.SHOPWARE_BASE_URL }}
+          SHOPWARE_PARTNER_ID: ${{ secrets.SHOPWARE_PARTNER_ID }}
+          SHOPWARE_SECRET: ${{ secrets.SHOPWARE_SECRET }}
+          SHOPWARE_TENANT_ID: ${{ secrets.SHOPWARE_TENANT_ID }}
+        run: node sync-shopware-vehicles.js
